@@ -1,12 +1,36 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useId } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+const signInForm = z.object({
+	email: z.email(),
+})
+
+type SignInForm = z.infer<typeof signInForm>
+
 export function SignIn() {
 	const emailInputId = useId()
+
+	const { handleSubmit, register, formState } = useForm({
+		resolver: zodResolver(signInForm),
+		defaultValues: {
+			email: '',
+		},
+	})
+
+	const { isSubmitting, isDirty } = formState
+
+	async function handleSignIn(data: SignInForm) {
+		console.log(data.email)
+
+		await new Promise((resolve) => setTimeout(resolve, 1000))
+	}
 
 	return (
 		<>
@@ -21,17 +45,22 @@ export function SignIn() {
 							Acompanhe suas vendas pelo painel do parceiro!
 						</p>
 					</div>
-					<form className="space-y-4">
+					<form className="space-y-4" onSubmit={handleSubmit(handleSignIn)}>
 						<div className="space-y-2">
 							<Label htmlFor={emailInputId}>Seu e-mail</Label>
 							<Input
+								{...register('email')}
 								id={emailInputId}
 								type="email"
-								placeholder="john@example.com"
+								placeholder="johndoe@example.com"
 							/>
 						</div>
 
-						<Button className="w-full" type="submit">
+						<Button
+							disabled={!isDirty || isSubmitting}
+							className="w-full"
+							type="submit"
+						>
 							Acessar painel
 						</Button>
 					</form>
