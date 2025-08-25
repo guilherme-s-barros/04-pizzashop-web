@@ -16,6 +16,9 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"a11y": {
+				"useValidAnchor": "off"
+			},
 			"suspicious": {
 				"noUnknownAtRules": "off"
 			},
