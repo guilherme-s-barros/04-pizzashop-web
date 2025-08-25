@@ -25,7 +25,7 @@ export function SignIn() {
 		},
 	})
 
-	const { isSubmitting, isDirty } = formState
+	const { isSubmitting } = formState
 
 	async function handleSignIn(data: SignInForm) {
 		console.log(data.email)
@@ -63,11 +63,7 @@ export function SignIn() {
 							/>
 						</div>
 
-						<Button
-							disabled={!isDirty || isSubmitting}
-							className="w-full"
-							type="submit"
-						>
+						<Button disabled={isSubmitting} className="w-full" type="submit">
 							Acessar painel
 						</Button>
 					</form>
