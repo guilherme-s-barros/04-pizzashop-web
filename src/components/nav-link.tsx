@@ -14,6 +14,7 @@ export function NavLink(props: NavLinkProps) {
 					{
 						'text-foreground': isActive,
 					},
+					props.className,
 				)
 			}
 		/>
