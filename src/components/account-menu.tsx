@@ -16,7 +16,7 @@ export function AccountMenu() {
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" className="group">
 					Pizza Shop
-					<ChevronDownIcon className="h-4 w-4 transition-transform group-data-[state=open]:rotate-180" />
+					<ChevronDownIcon className="transition-transform group-data-[state=open]:rotate-180" />
 				</Button>
 			</DropdownMenuTrigger>
 
@@ -31,12 +31,12 @@ export function AccountMenu() {
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem>
-					<BuildingIcon className="h-4 w-4" />
+					<BuildingIcon />
 					<span>Perfil da loja</span>
 				</DropdownMenuItem>
 
 				<DropdownMenuItem className="text-destructive">
-					<LogOutIcon className="h-4 w-4" />
+					<LogOutIcon />
 					<span>Sair</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
