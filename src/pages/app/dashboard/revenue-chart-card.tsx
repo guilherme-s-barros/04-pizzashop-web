@@ -8,12 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import {
-	type ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from '@/components/ui/chart'
+import { type ChartConfig, ChartContainer } from '@/components/ui/chart'
 
 const data = [
 	{ date: '07/07', revenue: 600.89 },
@@ -100,11 +95,6 @@ export function RevenueChartCard() {
 						/>
 
 						<CartesianGrid vertical={false} />
-						<ChartTooltip
-							content={
-								<ChartTooltipContent hideIndicator={true} hideLabel={true} />
-							}
-						/>
 					</AreaChart>
 				</ChartContainer>
 			</CardContent>
