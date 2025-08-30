@@ -17,7 +17,10 @@
 		"rules": {
 			"recommended": true,
 			"a11y": {
-				"useValidAnchor": "off"
+				"useValidAnchor": "warn"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
 			},
 			"suspicious": {
 				"noUnknownAtRules": "off"

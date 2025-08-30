@@ -33,7 +33,7 @@ export function SignUp() {
 
 	const { isSubmitting } = formState
 
-	async function handleSignUp(data: SignUpForm) {
+	async function handleSignUp(_data: SignUpForm) {
 		try {
 			await new Promise((resolve) => setTimeout(resolve, 1000))
 
