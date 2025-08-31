@@ -113,11 +113,17 @@ export function SignUp() {
 
 						<p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
 							Ao continuar, você concorda com nossos{' '}
-							<a href="#" className="underline underline-offset-4">
+							<a
+								href="#"
+								className="hover:underline underline-offset-4 text-link"
+							>
 								Termos de serviço
 							</a>{' '}
 							e{' '}
-							<a href="#" className="underline underline-offset-4">
+							<a
+								href="#"
+								className="hover:underline underline-offset-4 text-link"
+							>
 								Políticas de privacidade
 							</a>
 							.
