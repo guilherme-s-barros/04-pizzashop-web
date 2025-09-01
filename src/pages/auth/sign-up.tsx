@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useId } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
@@ -6,6 +7,7 @@ import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { registerRestaurant } from '@/api/register-restaurant'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -33,14 +35,25 @@ export function SignUp() {
 
 	const { isSubmitting } = formState
 
-	async function handleSignUp(_data: SignUpForm) {
+	const { mutateAsync: registerRestaurantFn } = useMutation({
+		mutationFn: registerRestaurant,
+	})
+
+	async function handleSignUp(formInputs: SignUpForm) {
+		const { restaurantName, managerName, email, phone } = formInputs
+
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000))
+			await registerRestaurantFn({
+				restaurantName,
+				managerName,
+				email,
+				phone,
+			})
 
 			toast.success('Restaurante cadastrado com sucesso!', {
 				action: {
 					label: 'Login',
-					onClick: () => navigate('/auth/sign-in'),
+					onClick: () => navigate(`/sign-in?email=${email}`),
 				},
 			})
 		} catch {
@@ -53,7 +66,7 @@ export function SignUp() {
 			<Helmet title="Cadastro" />
 			<div className="p-8">
 				<Button variant="ghost" asChild className="absolute right-8 top-8">
-					<Link to="/auth/sign-in">Fazer login</Link>
+					<Link to="/sign-in">Fazer login</Link>
 				</Button>
 
 				<div className="w-[350px] flex flex-col justify-center gap-6">
@@ -114,14 +127,14 @@ export function SignUp() {
 						<p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
 							Ao continuar, você concorda com nossos{' '}
 							<a
-								href="#"
+								href="#this-link-is-visual-only"
 								className="hover:underline underline-offset-4 text-link"
 							>
 								Termos de serviço
 							</a>{' '}
 							e{' '}
 							<a
-								href="#"
+								href="#this-link-is-visual-only"
 								className="hover:underline underline-offset-4 text-link"
 							>
 								Políticas de privacidade

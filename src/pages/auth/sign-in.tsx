@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useId } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -20,9 +20,13 @@ type SignInForm = z.infer<typeof signInForm>
 
 export function SignIn() {
 	const emailInputId = useId()
+	const [searchParams] = useSearchParams()
 
 	const { handleSubmit, register, formState } = useForm({
 		resolver: zodResolver(signInForm),
+		defaultValues: {
+			email: searchParams.get('email') ?? '',
+		},
 	})
 
 	const { isSubmitting } = formState
@@ -31,14 +35,14 @@ export function SignIn() {
 		mutationFn: signIn,
 	})
 
-	async function handleSignIn(data: SignInForm) {
+	async function handleSignIn(formInputs: SignInForm) {
 		try {
-			await authenticate({ email: data.email })
+			await authenticate({ email: formInputs.email })
 
 			toast.success('Enviamos um link de autenticação para seu e-mail.', {
 				action: {
 					label: 'Reenviar',
-					onClick: () => handleSignIn(data),
+					onClick: () => handleSignIn(formInputs),
 				},
 			})
 		} catch {
@@ -51,7 +55,7 @@ export function SignIn() {
 			<Helmet title="Login" />
 			<div className="p-8">
 				<Button variant="ghost" asChild className="absolute right-8 top-8">
-					<Link to="/auth/sign-up">Novo estabelecimento</Link>
+					<Link to="/sign-up">Novo estabelecimento</Link>
 				</Button>
 
 				<div className="w-[350px] flex flex-col justify-center gap-6">
