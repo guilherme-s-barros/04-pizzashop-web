@@ -39,9 +39,12 @@ export function SignUp() {
 		mutationFn: registerRestaurant,
 	})
 
-	async function handleSignUp(formInputs: SignUpForm) {
-		const { restaurantName, managerName, email, phone } = formInputs
-
+	async function handleSignUp({
+		restaurantName,
+		managerName,
+		email,
+		phone,
+	}: SignUpForm) {
 		try {
 			await registerRestaurantFn({
 				restaurantName,

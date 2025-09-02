@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useId } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
-import { getManagedRestaurant } from '@/api/get-managed-restaurant'
+import { updateProfile } from '@/api/update-profile'
+import { useManagedRestaurantQuery } from '@/hooks/use-managed-restaurant-query'
 import { Button } from './ui/button'
 import {
 	DialogClose,
@@ -30,12 +32,12 @@ export function StoreProfile() {
 	const nameInputId = useId()
 	const descriptionInputId = useId()
 
-	const { data: managedRestaurant } = useQuery({
-		queryKey: ['managed-restaurant'],
-		queryFn: getManagedRestaurant,
+	const { data: managedRestaurant } = useManagedRestaurantQuery()
+	const { mutateAsync: updateProfileFn } = useMutation({
+		mutationFn: updateProfile,
 	})
 
-	const { handleSubmit, register } = useForm({
+	const { handleSubmit, register, formState } = useForm({
 		resolver: zodResolver(storeProfileForm),
 		values: {
 			name: managedRestaurant?.name ?? '',
@@ -43,8 +45,19 @@ export function StoreProfile() {
 		},
 	})
 
-	async function handleUpdateStoreProfile(formInputs: StoreProfileForm) {
-		console.log(formInputs)
+	const { isSubmitting } = formState
+
+	async function handleUpdateProfile({ name, description }: StoreProfileForm) {
+		try {
+			await updateProfileFn({
+				name,
+				description,
+			})
+
+			toast.success('Perfil atualizado com sucesso!')
+		} catch {
+			toast.error('Falha ao atualizar o perfil. Tente novamente mais tarde.')
+		}
 	}
 
 	return (
@@ -60,7 +73,7 @@ export function StoreProfile() {
 			<form
 				id={formId}
 				className="space-y-4 py-4"
-				onSubmit={handleSubmit(handleUpdateStoreProfile)}
+				onSubmit={handleSubmit(handleUpdateProfile)}
 			>
 				<div className="grid grid-cols-4 items-center gap-4">
 					<Label className="text-right" htmlFor={nameInputId}>
@@ -83,8 +96,7 @@ export function StoreProfile() {
 					<Textarea
 						{...register('description')}
 						id={descriptionInputId}
-						rows={3}
-						className="col-span-3"
+						className="col-span-3 min-h-20"
 						placeholder="Escreva uma breve descrição do seu estabelecimento (especialidades, ambiente, história, etc)."
 					/>
 				</div>
@@ -97,11 +109,14 @@ export function StoreProfile() {
 					</Button>
 				</DialogClose>
 
-				<DialogClose asChild>
-					<Button type="submit" variant="success" form={formId}>
-						Salvar
-					</Button>
-				</DialogClose>
+				<Button
+					type="submit"
+					variant="success"
+					form={formId}
+					disabled={isSubmitting}
+				>
+					Salvar
+				</Button>
 			</DialogFooter>
 		</DialogContent>
 	)

@@ -7,6 +7,16 @@ interface RegisterRestaurantBody {
 	phone: string
 }
 
-export async function registerRestaurant(body: RegisterRestaurantBody) {
-	await api.post('/restaurants', body)
+export async function registerRestaurant({
+	managerName,
+	restaurantName,
+	email,
+	phone,
+}: RegisterRestaurantBody) {
+	await api.post('/restaurants', {
+		managerName,
+		restaurantName,
+		email,
+		phone,
+	})
 }

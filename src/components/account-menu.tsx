@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import { BuildingIcon, ChevronDownIcon, LogOutIcon } from 'lucide-react'
 
-import { getManagedRestaurant } from '@/api/get-managed-restaurant'
-import { getProfile } from '@/api/get-profile'
+import { useManagedRestaurantQuery } from '@/hooks/use-managed-restaurant-query'
+import { useProfileQuery } from '@/hooks/use-profile-query'
 import { StoreProfile } from './store-profile'
 import { Button } from './ui/button'
 import { Dialog, DialogTrigger } from './ui/dialog'
@@ -17,16 +16,9 @@ import {
 import { Skeleton } from './ui/skeleton'
 
 export function AccountMenu() {
-	const { data: profile, isLoading: isLoadingProfile } = useQuery({
-		queryKey: ['profile'],
-		queryFn: getProfile,
-	})
-
+	const { data: profile, isLoading: isLoadingProfile } = useProfileQuery()
 	const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
-		useQuery({
-			queryKey: ['managed-restaurant'],
-			queryFn: getManagedRestaurant,
-		})
+		useManagedRestaurantQuery()
 
 	return (
 		<Dialog>
