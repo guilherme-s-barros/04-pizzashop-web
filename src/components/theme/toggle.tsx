@@ -4,13 +4,18 @@ import { Button } from '../ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuItem,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
 	DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { useTheme } from './provider'
+import { type Theme, useTheme } from './provider'
 
 export function ThemeToggle() {
-	const { setTheme } = useTheme()
+	const { theme, setTheme } = useTheme()
+
+	function handleThemeChange(value: string) {
+		setTheme(value as Theme)
+	}
 
 	return (
 		<DropdownMenu>
@@ -23,15 +28,11 @@ export function ThemeToggle() {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent align="end">
-				<DropdownMenuItem onClick={() => setTheme('light')}>
-					Claro
-				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('dark')}>
-					Escuro
-				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('system')}>
-					Sistema
-				</DropdownMenuItem>
+				<DropdownMenuRadioGroup value={theme} onValueChange={handleThemeChange}>
+					<DropdownMenuRadioItem value="light">Claro</DropdownMenuRadioItem>
+					<DropdownMenuRadioItem value="dark">Escuro</DropdownMenuRadioItem>
+					<DropdownMenuRadioItem value="system">Sistema</DropdownMenuRadioItem>
+				</DropdownMenuRadioGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)
