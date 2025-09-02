@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useId } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,6 +20,8 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
 
+import type { GetManagedRestaurantResponse } from '@/api/get-managed-restaurant'
+
 const storeProfileForm = z.object({
 	name: z.string().min(1),
 	description: z.string(),
@@ -32,9 +34,30 @@ export function StoreProfile() {
 	const nameInputId = useId()
 	const descriptionInputId = useId()
 
+	const queryClient = useQueryClient()
+
 	const { data: managedRestaurant } = useManagedRestaurantQuery()
+
 	const { mutateAsync: updateProfileFn } = useMutation({
 		mutationFn: updateProfile,
+		onSuccess(_, updatedProfile) {
+			const { name, description } = updatedProfile
+
+			queryClient.setQueryData<GetManagedRestaurantResponse>(
+				['managed-restaurant'],
+				(cached) => {
+					if (!cached) {
+						return
+					}
+
+					return {
+						...cached,
+						name,
+						description,
+					}
+				},
+			)
+		},
 	})
 
 	const { handleSubmit, register, formState } = useForm({
