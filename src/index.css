@@ -25,6 +25,8 @@
 	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
 	--color-success: var(--success);
+	--color-warn: var(--warn);
+	--color-info: var(--info);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
@@ -61,7 +63,9 @@
 	--accent: oklch(0.967 0.001 286.375);
 	--accent-foreground: oklch(0.21 0.006 285.885);
 	--destructive: oklch(0.577 0.245 27.325);
-	--success: oklch(0.81901 0.18442 160.275);
+	--success: oklch(57.975% 0.12966 160.74);
+	--warn: oklch(66.905% 0.13679 86.983);
+	--info: oklch(59.32% 0.18704 253.771);
 	--border: oklch(0.92 0.004 286.32);
 	--input: oklch(0.92 0.004 286.32);
 	--ring: oklch(0.637 0.237 25.331);
@@ -97,7 +101,9 @@
 	--accent: oklch(0.274 0.006 286.033);
 	--accent-foreground: oklch(0.985 0 0);
 	--destructive: oklch(0.704 0.191 22.216);
-	--success: oklch(92.201% 0.12433 159.59);
+	--success: oklch(89.458% 0.18072 156.212);
+	--warn: oklch(89.96% 0.1421 92.488);
+	--info: oklch(75.091% 0.13557 247.078);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
 	--ring: oklch(0.637 0.237 25.331);
@@ -128,5 +134,21 @@
 @layer utilities {
 	.order-status-dot-pending {
 		@apply before:h-2 before:w-2 before:rounded-full before:bg-muted-foreground;
+	}
+
+	.order-status-dot-canceled {
+		@apply before:h-2 before:w-2 before:rounded-full before:bg-destructive;
+	}
+
+	.order-status-dot-processing {
+		@apply before:h-2 before:w-2 before:rounded-full before:bg-warn/70;
+	}
+
+	.order-status-dot-delivering {
+		@apply before:h-2 before:w-2 before:rounded-full before:bg-warn;
+	}
+
+	.order-status-dot-delivered {
+		@apply before:h-2 before:w-2 before:rounded-full before:bg-success;
 	}
 }
