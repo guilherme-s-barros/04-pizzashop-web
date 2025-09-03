@@ -24,7 +24,7 @@ import type { GetManagedRestaurantResponse } from '@/api/get-managed-restaurant'
 
 const storeProfileForm = z.object({
 	name: z.string().min(1),
-	description: z.string(),
+	description: z.string().nullable(),
 })
 
 type StoreProfileForm = z.infer<typeof storeProfileForm>
@@ -37,26 +37,15 @@ export function StoreProfile() {
 	const queryClient = useQueryClient()
 
 	const { data: managedRestaurant } = useManagedRestaurantQuery()
-
 	const { mutateAsync: updateProfileFn } = useMutation({
 		mutationFn: updateProfile,
-		onSuccess(_, updatedProfile) {
-			const { name, description } = updatedProfile
+		onMutate: updateManagedRestaurantCache,
+		onError(_, __, context) {
+			if (!context?.previousProfileCache) {
+				return
+			}
 
-			queryClient.setQueryData<GetManagedRestaurantResponse>(
-				['managed-restaurant'],
-				(cached) => {
-					if (!cached) {
-						return
-					}
-
-					return {
-						...cached,
-						name,
-						description,
-					}
-				},
-			)
+			updateManagedRestaurantCache(context.previousProfileCache)
 		},
 	})
 
@@ -69,6 +58,33 @@ export function StoreProfile() {
 	})
 
 	const { isSubmitting } = formState
+
+	function updateManagedRestaurantCache({
+		name,
+		description,
+	}: StoreProfileForm) {
+		const previousProfileCache =
+			queryClient.getQueryData<GetManagedRestaurantResponse>([
+				'managed-restaurant',
+			])
+
+		if (!previousProfileCache) {
+			return
+		}
+
+		queryClient.setQueryData<GetManagedRestaurantResponse>(
+			['managed-restaurant'],
+			{
+				...previousProfileCache,
+				name,
+				description,
+			},
+		)
+
+		return {
+			previousProfileCache,
+		}
+	}
 
 	async function handleUpdateProfile({ name, description }: StoreProfileForm) {
 		try {
