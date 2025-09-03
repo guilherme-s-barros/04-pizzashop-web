@@ -1,5 +1,8 @@
+import { useMutation } from '@tanstack/react-query'
 import { BuildingIcon, ChevronDownIcon, LogOutIcon } from 'lucide-react'
+import { redirect, useNavigate } from 'react-router'
 
+import { signOut } from '@/api/sign-out'
 import { useManagedRestaurantQuery } from '@/hooks/use-managed-restaurant-query'
 import { useProfileQuery } from '@/hooks/use-profile-query'
 import { StoreProfile } from './store-profile'
@@ -16,9 +19,16 @@ import {
 import { Skeleton } from './ui/skeleton'
 
 export function AccountMenu() {
+	const navigate = useNavigate()
+
 	const { data: profile, isLoading: isLoadingProfile } = useProfileQuery()
 	const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
 		useManagedRestaurantQuery()
+
+	const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
+		mutationFn: signOut,
+		onSuccess: () => navigate('/sign-in', { replace: true }),
+	})
 
 	return (
 		<Dialog>
@@ -60,7 +70,11 @@ export function AccountMenu() {
 						</DropdownMenuItem>
 					</DialogTrigger>
 
-					<DropdownMenuItem className="text-destructive">
+					<DropdownMenuItem
+						onClick={() => signOutFn()}
+						className="text-destructive"
+						disabled={isSigningOut}
+					>
 						<LogOutIcon />
 						<span>Sair</span>
 					</DropdownMenuItem>
