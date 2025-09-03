@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { BuildingIcon, ChevronDownIcon, LogOutIcon } from 'lucide-react'
-import { redirect, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { signOut } from '@/api/sign-out'
 import { useManagedRestaurantQuery } from '@/hooks/use-managed-restaurant-query'

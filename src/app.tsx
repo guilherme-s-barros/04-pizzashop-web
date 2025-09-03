@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { RouterProvider } from 'react-router'
 
+import { QueryLoadingBar } from './components/query-loading-bar'
 import { ThemeProvider } from './components/theme/provider'
 import { Toaster } from './components/ui/sonner'
 import { queryClient } from './lib/react-query'
@@ -17,6 +18,7 @@ export function App() {
 				<Toaster richColors />
 
 				<QueryClientProvider client={queryClient}>
+					<QueryLoadingBar />
 					<RouterProvider router={router} />
 				</QueryClientProvider>
 			</ThemeProvider>
