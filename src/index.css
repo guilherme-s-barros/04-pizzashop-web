@@ -141,7 +141,7 @@
 	}
 
 	.order-status-dot-processing {
-		@apply before:h-2 before:w-2 before:rounded-full before:bg-warn/70;
+		@apply before:h-2 before:w-2 before:rounded-full before:bg-warn/50;
 	}
 
 	.order-status-dot-delivering {

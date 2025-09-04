@@ -21,6 +21,16 @@ interface OrderTableRowProps {
 }
 
 export function OrderTableRow({ order }: OrderTableRowProps) {
+	const requestedAt = formatDistanceToNow(order.createdAt, {
+		addSuffix: true,
+		locale: ptBR,
+	})
+
+	const total = order.total.toLocaleString('pt-br', {
+		style: 'currency',
+		currency: 'BRL',
+	})
+
 	return (
 		<TableRow>
 			<TableCell>
@@ -37,22 +47,12 @@ export function OrderTableRow({ order }: OrderTableRowProps) {
 			<TableCell className="font-mono text-xs font-medium">
 				{order.orderId}
 			</TableCell>
-			<TableCell className="text-muted-foreground">
-				{formatDistanceToNow(order.createdAt, {
-					addSuffix: true,
-					locale: ptBR,
-				})}
-			</TableCell>
+			<TableCell className="text-muted-foreground">{requestedAt}</TableCell>
 			<TableCell>
 				<OrderStatus status={order.status} />
 			</TableCell>
 			<TableCell className="font-medium">{order.customerName}</TableCell>
-			<TableCell className="font-medium">
-				{order.total.toLocaleString('pt-br', {
-					style: 'currency',
-					currency: 'BRL',
-				})}
-			</TableCell>
+			<TableCell className="font-medium">{total}</TableCell>
 			<TableCell>
 				<Button variant="outline" size="sm">
 					<ArrowRightIcon />

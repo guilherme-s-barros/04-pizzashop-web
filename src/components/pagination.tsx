@@ -11,12 +11,14 @@ interface PaginationProps {
 	pageIndex: number
 	totalCount: number
 	perPage: number
+	onPageChange(pageIndex: number): Promise<void> | void
 }
 
 export function Pagination({
 	pageIndex,
 	perPage,
 	totalCount,
+	onPageChange,
 }: PaginationProps) {
 	const pages = Math.ceil(totalCount / (perPage || 1))
 
@@ -32,22 +34,42 @@ export function Pagination({
 				</span>
 
 				<div className="flex items-center gap-2">
-					<Button variant="outline" size="icon-sm">
+					<Button
+						variant="outline"
+						size="icon-sm"
+						onClick={() => onPageChange(0)}
+						disabled={pageIndex === 0}
+					>
 						<ChevronsLeftIcon />
 						<span className="sr-only">Ir à primeira página</span>
 					</Button>
 
-					<Button variant="outline" size="icon-sm">
+					<Button
+						variant="outline"
+						size="icon-sm"
+						onClick={() => onPageChange(pageIndex - 1)}
+						disabled={pageIndex === 0}
+					>
 						<ChevronLeftIcon />
 						<span className="sr-only">Ir à página anterior</span>
 					</Button>
 
-					<Button variant="outline" size="icon-sm">
+					<Button
+						variant="outline"
+						size="icon-sm"
+						onClick={() => onPageChange(pageIndex + 1)}
+						disabled={pageIndex >= pages - 1}
+					>
 						<ChevronRightIcon />
 						<span className="sr-only">Ir à próxima página</span>
 					</Button>
 
-					<Button variant="outline" size="icon-sm">
+					<Button
+						variant="outline"
+						size="icon-sm"
+						onClick={() => onPageChange(pages - 1)}
+						disabled={pageIndex >= pages - 1}
+					>
 						<ChevronsRightIcon />
 						<span className="sr-only">Ir à última página</span>
 					</Button>
