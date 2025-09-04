@@ -1,5 +1,5 @@
 import { useIsFetching, useIsMutating } from '@tanstack/react-query'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LoadingBar, { type LoadingBarRef } from 'react-top-loading-bar'
 
 export function QueryLoadingBar() {
@@ -7,10 +7,30 @@ export function QueryLoadingBar() {
 	const isFetching = useIsFetching()
 	const isMutating = useIsMutating()
 
-	if (isFetching || isMutating) {
-		loadingBar.current?.continuousStart()
-	} else {
-		loadingBar.current?.complete()
+	const [showBar, setShowBar] = useState(false)
+
+	useEffect(() => {
+		let timeout: NodeJS.Timeout
+
+		timeout = setTimeout(() => setShowBar(true), 500)
+
+		return () => clearTimeout(timeout)
+	}, [])
+
+	useEffect(() => {
+		if (!showBar) {
+			return
+		}
+
+		if (isFetching || isMutating) {
+			loadingBar.current?.continuousStart()
+		} else {
+			loadingBar.current?.complete()
+		}
+	}, [showBar, isFetching, isMutating])
+
+	if (!showBar) {
+		return null
 	}
 
 	return (
