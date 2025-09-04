@@ -12,18 +12,18 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-const signInForm = z.object({
+const signInSchema = z.object({
 	email: z.email(),
 })
 
-type SignInForm = z.infer<typeof signInForm>
+type SignInSchema = z.infer<typeof signInSchema>
 
 export function SignIn() {
 	const emailInputId = useId()
 	const [searchParams] = useSearchParams()
 
 	const { handleSubmit, register, formState } = useForm({
-		resolver: zodResolver(signInForm),
+		resolver: zodResolver(signInSchema),
 		defaultValues: {
 			email: searchParams.get('email') ?? '',
 		},
@@ -35,7 +35,7 @@ export function SignIn() {
 		mutationFn: signIn,
 	})
 
-	async function handleSignIn(formInputs: SignInForm) {
+	async function handleSignIn(formInputs: SignInSchema) {
 		try {
 			await authenticate({ email: formInputs.email })
 

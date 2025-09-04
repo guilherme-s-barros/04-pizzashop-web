@@ -12,14 +12,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-const signUpForm = z.object({
+const signUpSchema = z.object({
 	restaurantName: z.string().nonempty(),
 	managerName: z.string().nonempty(),
 	email: z.email(),
 	phone: z.string().nonempty(),
 })
 
-type SignUpForm = z.infer<typeof signUpForm>
+type SignUpSchema = z.infer<typeof signUpSchema>
 
 export function SignUp() {
 	const restaurantInputId = useId()
@@ -30,7 +30,7 @@ export function SignUp() {
 	const navigate = useNavigate()
 
 	const { handleSubmit, register, formState } = useForm({
-		resolver: zodResolver(signUpForm),
+		resolver: zodResolver(signUpSchema),
 	})
 
 	const { isSubmitting } = formState
@@ -44,7 +44,7 @@ export function SignUp() {
 		managerName,
 		email,
 		phone,
-	}: SignUpForm) {
+	}: SignUpSchema) {
 		try {
 			await registerRestaurantFn({
 				restaurantName,

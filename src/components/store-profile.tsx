@@ -22,12 +22,12 @@ import { Textarea } from './ui/textarea'
 
 import type { GetManagedRestaurantResponse } from '@/api/get-managed-restaurant'
 
-const storeProfileForm = z.object({
+const storeProfileSchema = z.object({
 	name: z.string().min(1),
 	description: z.string().nullable(),
 })
 
-type StoreProfileForm = z.infer<typeof storeProfileForm>
+type StoreProfileSchema = z.infer<typeof storeProfileSchema>
 
 export function StoreProfile() {
 	const formId = useId()
@@ -50,7 +50,7 @@ export function StoreProfile() {
 	})
 
 	const { handleSubmit, register, formState } = useForm({
-		resolver: zodResolver(storeProfileForm),
+		resolver: zodResolver(storeProfileSchema),
 		values: {
 			name: managedRestaurant?.name ?? '',
 			description: managedRestaurant?.description ?? '',
@@ -62,7 +62,7 @@ export function StoreProfile() {
 	function updateManagedRestaurantCache({
 		name,
 		description,
-	}: StoreProfileForm) {
+	}: StoreProfileSchema) {
 		const previousProfileCache =
 			queryClient.getQueryData<GetManagedRestaurantResponse>([
 				'managed-restaurant',
@@ -86,7 +86,10 @@ export function StoreProfile() {
 		}
 	}
 
-	async function handleUpdateProfile({ name, description }: StoreProfileForm) {
+	async function handleUpdateProfile({
+		name,
+		description,
+	}: StoreProfileSchema) {
 		try {
 			await updateProfileFn({
 				name,

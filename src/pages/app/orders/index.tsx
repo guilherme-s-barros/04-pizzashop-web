@@ -25,9 +25,26 @@ export function Orders() {
 		.transform((page) => Math.max(0, page - 1))
 		.parse(searchParams.get('page'))
 
+	const orderId = searchParams.get('orderId')
+	const customerName = searchParams.get('customerName')
+
+	const status = z
+		.enum([
+			'all',
+			'pending',
+			'canceled',
+			'processing',
+			'delivering',
+			'delivered',
+		])
+		.default('all')
+		.catch('all')
+		.transform((value) => (value === 'all' ? null : value))
+		.parse(searchParams.get('status'))
+
 	const { data: result } = useQuery({
-		queryKey: ['orders', pageIndex],
-		queryFn: () => getOrders({ pageIndex }),
+		queryKey: ['orders', pageIndex, orderId, customerName, status],
+		queryFn: () => getOrders({ pageIndex, orderId, customerName, status }),
 		staleTime: 1000 * 60, // 1 minute
 	})
 
