@@ -14,7 +14,7 @@ interface Meta {
 	totalCount: number
 }
 
-interface GetOrdersResponse {
+export interface GetOrdersResponse {
 	orders: Order[]
 	meta: Meta
 }
