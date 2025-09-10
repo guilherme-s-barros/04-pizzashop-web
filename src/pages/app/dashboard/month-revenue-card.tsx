@@ -3,7 +3,6 @@ import { DollarSignIcon } from 'lucide-react'
 
 import { getMonthRevenue } from '@/api/get-month-revenue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 export function MonthRevenueCard() {
@@ -22,7 +21,7 @@ export function MonthRevenueCard() {
 			</CardHeader>
 
 			<CardContent className="flex flex-col gap-1">
-				{monthRevenue ? (
+				{monthRevenue && (
 					<>
 						<strong className="text-2xl tracking-tight">
 							{(monthRevenue.receipt / 100).toLocaleString('pt-BR', {
@@ -45,11 +44,6 @@ export function MonthRevenueCard() {
 							</span>{' '}
 							em relação ao mês passado
 						</p>
-					</>
-				) : (
-					<>
-						<Skeleton className="h-8 w-24" />
-						<Skeleton className="h-4 w-54" />
 					</>
 				)}
 			</CardContent>

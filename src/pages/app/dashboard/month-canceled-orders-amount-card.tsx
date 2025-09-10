@@ -3,7 +3,6 @@ import { BanknoteArrowDownIcon } from 'lucide-react'
 
 import { getMonthCanceledOrdersAmount } from '@/api/get-month-canceled-orders-amount'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 export function MonthCanceledOrdersAmountCard() {
@@ -20,7 +19,7 @@ export function MonthCanceledOrdersAmountCard() {
 			</CardHeader>
 
 			<CardContent className="flex flex-col gap-1">
-				{monthCanceledOrdersAmount ? (
+				{monthCanceledOrdersAmount && (
 					<>
 						<strong className="text-2xl tracking-tight">
 							{monthCanceledOrdersAmount.amount.toLocaleString('pt-BR')}
@@ -45,11 +44,6 @@ export function MonthCanceledOrdersAmountCard() {
 							</span>{' '}
 							em relação ao mês passado
 						</p>
-					</>
-				) : (
-					<>
-						<Skeleton className="h-8 w-24" />
-						<Skeleton className="h-4 w-54" />
 					</>
 				)}
 			</CardContent>

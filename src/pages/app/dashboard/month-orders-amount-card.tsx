@@ -3,7 +3,6 @@ import { UtensilsIcon } from 'lucide-react'
 
 import { getMonthOrdersAmount } from '@/api/get-month-orders-amount'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 export function MonthOrdersAmountCard() {
@@ -20,7 +19,7 @@ export function MonthOrdersAmountCard() {
 			</CardHeader>
 
 			<CardContent className="flex flex-col gap-1">
-				{monthOrdersAmount ? (
+				{monthOrdersAmount && (
 					<>
 						<strong className="text-2xl tracking-tight">
 							{monthOrdersAmount.amount.toLocaleString('pt-BR')}
@@ -40,11 +39,6 @@ export function MonthOrdersAmountCard() {
 							</span>{' '}
 							em relação ao mês passado
 						</p>
-					</>
-				) : (
-					<>
-						<Skeleton className="h-8 w-24" />
-						<Skeleton className="h-4 w-54" />
 					</>
 				)}
 			</CardContent>
