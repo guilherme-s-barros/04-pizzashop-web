@@ -1,8 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
 import { DollarSignIcon } from 'lucide-react'
 
+import { getMonthRevenue } from '@/api/get-month-revenue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 
 export function MonthRevenueCard() {
+	const { data: monthRevenue } = useQuery({
+		queryKey: ['metrics', 'month-revenue'],
+		queryFn: getMonthRevenue,
+	})
+
+	console.log
+
 	return (
 		<Card>
 			<CardHeader className="flex items-center justify-between">
@@ -11,11 +22,36 @@ export function MonthRevenueCard() {
 			</CardHeader>
 
 			<CardContent className="flex flex-col gap-1">
-				<strong className="text-2xl tracking-tight">R$ 1.280,60</strong>
+				{monthRevenue ? (
+					<>
+						<strong className="text-2xl tracking-tight">
+							{(monthRevenue.receipt / 100).toLocaleString('pt-BR', {
+								style: 'currency',
+								currency: 'BRL',
+							})}
+						</strong>
 
-				<p className="text-xs text-muted-foreground">
-					<span className="text-success">+ 2%</span> em relação ao mês passado
-				</p>
+						<p className="text-xs text-muted-foreground">
+							<span
+								className={cn({
+									'text-success': monthRevenue.diffFromLastMonth > 0,
+									'text-destructive': monthRevenue.diffFromLastMonth < 0,
+								})}
+							>
+								{monthRevenue.diffFromLastMonth.toLocaleString('pt-BR', {
+									signDisplay: 'exceptZero',
+								})}
+								%
+							</span>{' '}
+							em relação ao mês passado
+						</p>
+					</>
+				) : (
+					<>
+						<Skeleton className="h-8 w-24" />
+						<Skeleton className="h-4 w-54" />
+					</>
+				)}
 			</CardContent>
 		</Card>
 	)
