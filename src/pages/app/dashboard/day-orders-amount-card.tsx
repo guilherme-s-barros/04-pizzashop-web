@@ -4,6 +4,7 @@ import { UtensilsIcon } from 'lucide-react'
 import { getDayOrdersAmount } from '@/api/get-day-orders-amount'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { MetricCardSkeleton } from './metric-card-skeleton'
 
 export function DayOrdersAmountCard() {
 	const { data: dayOrdersAmount } = useQuery({
@@ -20,7 +21,7 @@ export function DayOrdersAmountCard() {
 			</CardHeader>
 
 			<CardContent className="flex flex-col gap-1">
-				{dayOrdersAmount && (
+				{dayOrdersAmount ? (
 					<>
 						<strong className="text-2xl tracking-tight">
 							{dayOrdersAmount.amount.toLocaleString('pt-BR')}
@@ -41,6 +42,8 @@ export function DayOrdersAmountCard() {
 							em relação a ontem
 						</p>
 					</>
+				) : (
+					<MetricCardSkeleton />
 				)}
 			</CardContent>
 		</Card>
