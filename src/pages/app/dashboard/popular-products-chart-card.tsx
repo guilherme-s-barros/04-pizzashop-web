@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { BarChart } from 'lucide-react'
+import { BarChart, Loader2Icon } from 'lucide-react'
 import { Cell, Pie, PieChart } from 'recharts'
 
 import { getPopularProducts } from '@/api/get-popular-products'
@@ -39,7 +39,7 @@ export function PopularProductsChartCard() {
 				<BarChart className="h-4 w-4 text-muted-foreground" />
 			</CardHeader>
 			<CardContent>
-				{popularProducts && (
+				{popularProducts ? (
 					<ChartContainer config={chartConfig} className="h-[240px] w-full">
 						<PieChart accessibilityLayer>
 							<Pie
@@ -100,6 +100,10 @@ export function PopularProductsChartCard() {
 							/>
 						</PieChart>
 					</ChartContainer>
+				) : (
+					<div className="flex h-[240px] w-full items-center justify-center">
+						<Loader2Icon className="h-8 w-8 animate-spin text-muted-foreground" />
+					</div>
 				)}
 			</CardContent>
 		</Card>

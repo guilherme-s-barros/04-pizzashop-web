@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { subDays } from 'date-fns'
+import { Loader2Icon } from 'lucide-react'
 import { useId, useMemo, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
@@ -66,60 +67,66 @@ export function RevenueChartCard() {
 				</div>
 			</CardHeader>
 			<CardContent>
-				<ChartContainer config={chartConfig} className="h-[240px] w-full">
-					<AreaChart accessibilityLayer data={chartData}>
-						<defs>
-							<linearGradient
-								id={receiptGradientId}
-								x1="0"
-								y1="0"
-								x2="0"
-								y2="1"
-							>
-								<stop
-									offset="0%"
-									stopColor="var(--color-receipt)"
-									stopOpacity={0.7}
-								/>
-								<stop
-									offset="100%"
-									stopColor="var(--color-receipt)"
-									stopOpacity={0}
-								/>
-							</linearGradient>
-						</defs>
+				{dailyRevenueInPeriod ? (
+					<ChartContainer config={chartConfig} className="h-[240px] w-full">
+						<AreaChart accessibilityLayer data={chartData}>
+							<defs>
+								<linearGradient
+									id={receiptGradientId}
+									x1="0"
+									y1="0"
+									x2="0"
+									y2="1"
+								>
+									<stop
+										offset="0%"
+										stopColor="var(--color-receipt)"
+										stopOpacity={0.7}
+									/>
+									<stop
+										offset="100%"
+										stopColor="var(--color-receipt)"
+										stopOpacity={0}
+									/>
+								</linearGradient>
+							</defs>
 
-						<Area
-							type="monotone"
-							dataKey="receipt"
-							fill={`url(#${receiptGradientId})`}
-							stroke="var(--color-receipt)"
-							strokeWidth={2}
-						/>
+							<Area
+								type="monotone"
+								dataKey="receipt"
+								fill={`url(#${receiptGradientId})`}
+								stroke="var(--color-receipt)"
+								strokeWidth={2}
+							/>
 
-						<XAxis
-							dataKey="date"
-							tickLine={false}
-							axisLine={false}
-							tickMargin={16}
-						/>
+							<XAxis
+								dataKey="date"
+								tickLine={false}
+								axisLine={false}
+								tickMargin={16}
+							/>
 
-						<YAxis
-							tickLine={false}
-							axisLine={false}
-							tickMargin={10}
-							width={80}
-							tickFormatter={(receipt: number) =>
-								receipt.toLocaleString('pt-br', {
-									style: 'currency',
-									currency: 'BRL',
-								})
-							}
-						/>
+							<YAxis
+								tickLine={false}
+								axisLine={false}
+								tickMargin={10}
+								width={80}
+								tickFormatter={(receipt: number) =>
+									receipt.toLocaleString('pt-br', {
+										style: 'currency',
+										currency: 'BRL',
+									})
+								}
+							/>
 
-						<CartesianGrid vertical={false} />
-					</AreaChart>
-				</ChartContainer>
+							<CartesianGrid vertical={false} />
+						</AreaChart>
+					</ChartContainer>
+				) : (
+					<div className="flex h-[240px] w-full items-center justify-center">
+						<Loader2Icon className="h-8 w-8 animate-spin text-muted-foreground" />
+					</div>
+				)}
 			</CardContent>
 		</Card>
 	)
