@@ -1,6 +1,11 @@
-import { useId } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { subDays } from 'date-fns'
+import { useId, useMemo, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
+import type { DateRange } from 'react-day-picker'
+
+import { getDailyRevenueInPeriod } from '@/api/get-daily-revenue-in-period'
 import {
 	Card,
 	CardContent,
@@ -9,30 +14,43 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { type ChartConfig, ChartContainer } from '@/components/ui/chart'
-
-const data = [
-	{ date: '07/07', revenue: 600.89 },
-	{ date: '08/07', revenue: 720.05 },
-	{ date: '09/07', revenue: 520.123 },
-	{ date: '10/07', revenue: 280.28 },
-	{ date: '11/07', revenue: 1200.93 },
-	{ date: '12/07', revenue: 786.5 },
-	{ date: '13/07', revenue: 920.2 },
-	{ date: '14/07', revenue: 560.6 },
-	{ date: '15/07', revenue: 735.25 },
-]
+import { DateRangePicker } from '@/components/ui/date-range-picker'
+import { Label } from '@/components/ui/label'
 
 const randomChartColor = Math.floor(Math.random() * 5) + 1 // min: 1, max: 5
 
 const chartConfig = {
-	revenue: {
+	receipt: {
 		label: 'Receita',
 		color: `var(--chart-${randomChartColor})`,
 	},
 } satisfies ChartConfig
 
 export function RevenueChartCard() {
-	const revenueGradientId = useId()
+	const receiptGradientId = useId()
+	const [dateRange, setDateRange] = useState<DateRange | undefined>({
+		from: subDays(new Date(), 7),
+		to: new Date(),
+	})
+
+	const { data: dailyRevenueInPeriod } = useQuery({
+		queryKey: ['metrics', 'daily-revenue-in-period', dateRange],
+		queryFn: () =>
+			getDailyRevenueInPeriod({
+				from: dateRange?.from,
+				to: dateRange?.to,
+			}),
+		staleTime: 1000 * 60, // 1 minute
+	})
+
+	const chartData = useMemo(
+		() =>
+			dailyRevenueInPeriod?.map((chartItem) => ({
+				date: chartItem.date,
+				receipt: chartItem.receipt / 100,
+			})),
+		[dailyRevenueInPeriod],
+	)
 
 	return (
 		<Card className="col-span-6">
@@ -41,13 +59,18 @@ export function RevenueChartCard() {
 					<CardTitle>Receita no período</CardTitle>
 					<CardDescription>Receita diária no período</CardDescription>
 				</div>
+
+				<div className="flex items-center gap-3">
+					<Label>Período</Label>
+					<DateRangePicker date={dateRange} onDateChange={setDateRange} />
+				</div>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig} className="h-[240px] w-full">
-					<AreaChart accessibilityLayer data={data}>
+					<AreaChart accessibilityLayer data={chartData}>
 						<defs>
 							<linearGradient
-								id={revenueGradientId}
+								id={receiptGradientId}
 								x1="0"
 								y1="0"
 								x2="0"
@@ -55,12 +78,12 @@ export function RevenueChartCard() {
 							>
 								<stop
 									offset="0%"
-									stopColor="var(--color-revenue)"
+									stopColor="var(--color-receipt)"
 									stopOpacity={0.7}
 								/>
 								<stop
 									offset="100%"
-									stopColor="var(--color-revenue)"
+									stopColor="var(--color-receipt)"
 									stopOpacity={0}
 								/>
 							</linearGradient>
@@ -68,9 +91,9 @@ export function RevenueChartCard() {
 
 						<Area
 							type="monotone"
-							dataKey="revenue"
-							fill={`url(#${revenueGradientId})`}
-							stroke="var(--color-revenue)"
+							dataKey="receipt"
+							fill={`url(#${receiptGradientId})`}
+							stroke="var(--color-receipt)"
 							strokeWidth={2}
 						/>
 
@@ -86,8 +109,8 @@ export function RevenueChartCard() {
 							axisLine={false}
 							tickMargin={10}
 							width={80}
-							tickFormatter={(revenue: number) =>
-								revenue.toLocaleString('pt-br', {
+							tickFormatter={(receipt: number) =>
+								receipt.toLocaleString('pt-br', {
 									style: 'currency',
 									currency: 'BRL',
 								})

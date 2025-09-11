@@ -9,6 +9,7 @@ export function MonthOrdersAmountCard() {
 	const { data: monthOrdersAmount } = useQuery({
 		queryKey: ['metrics', 'month-orders-amount'],
 		queryFn: getMonthOrdersAmount,
+		staleTime: 1000 * 60, // 1 minute
 	})
 
 	return (

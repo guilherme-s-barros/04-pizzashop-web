@@ -29,6 +29,7 @@ export function PopularProductsChartCard() {
 	const { data: popularProducts } = useQuery({
 		queryKey: ['metrics', 'popular-products'],
 		queryFn: getPopularProducts,
+		staleTime: 1000 * 60, // 1 minute
 	})
 
 	return (

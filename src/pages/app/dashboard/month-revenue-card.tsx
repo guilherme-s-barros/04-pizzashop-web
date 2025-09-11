@@ -9,6 +9,7 @@ export function MonthRevenueCard() {
 	const { data: monthRevenue } = useQuery({
 		queryKey: ['metrics', 'month-revenue'],
 		queryFn: getMonthRevenue,
+		staleTime: 1000 * 60, // 1 minute
 	})
 
 	console.log
