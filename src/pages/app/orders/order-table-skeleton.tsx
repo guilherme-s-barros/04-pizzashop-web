@@ -1,4 +1,4 @@
-import { ArrowRightIcon, SearchIcon, XIcon } from 'lucide-react'
+import { SearchIcon } from 'lucide-react'
 import { useId } from 'react'
 
 import { Button } from '@/components/ui/button'
