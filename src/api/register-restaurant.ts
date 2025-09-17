@@ -1,6 +1,6 @@
 import { api } from '@/lib/axios'
 
-interface RegisterRestaurantBody {
+export interface RegisterRestaurantBody {
 	email: string
 	managerName: string
 	restaurantName: string
