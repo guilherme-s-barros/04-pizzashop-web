@@ -1,9 +1,16 @@
 import { api } from '@/lib/axios'
 
-interface Order {
+export type Status =
+	| 'pending'
+	| 'canceled'
+	| 'processing'
+	| 'delivering'
+	| 'delivered'
+
+export interface Order {
 	orderId: string
 	customerName: string
-	status: 'pending' | 'canceled' | 'processing' | 'delivering' | 'delivered'
+	status: Status
 	total: number
 	createdAt: string
 }
@@ -23,14 +30,7 @@ interface GetOrdersQuery {
 	pageIndex?: number | null
 	orderId?: string | null
 	customerName?: string | null
-	status?:
-		| 'all'
-		| 'pending'
-		| 'canceled'
-		| 'processing'
-		| 'delivering'
-		| 'delivered'
-		| null
+	status?: 'all' | Status | null
 }
 
 export async function getOrders({
